@@ -38,7 +38,7 @@ class CategorizerServicer(CategorizerServiceServicer):
                 CategoryResponse.Category(
                     index=text.index,
                     success=CategoryResponse.Category.Success(
-                        category_name='dummy_category', confidence=0.0
+                        category_name="dummy_category", confidence=0.0
                     ),
                 )
                 for text in request.texts

@@ -23,20 +23,20 @@ async def serve() -> None:
         server,
     )
 
-    port = server.add_insecure_port('[::]:50051')
+    port = server.add_insecure_port("[::]:50051")
     if port == 0:
-        raise RuntimeError('Failed to bind gRPC server port')
+        raise RuntimeError("Failed to bind gRPC server port")
 
     await server.start()
-    logger.info('gRPC server started on port %s', port)
+    logger.info("gRPC server started on port %s", port)
 
     with anyio.open_signal_receiver(signal.SIGINT, signal.SIGTERM) as signals:
         try:
             async for signum in signals:
-                logger.info('Received signal %s, shutting down', signum)
+                logger.info("Received signal %s, shutting down", signum)
                 break
         finally:
             with anyio.CancelScope(shield=True):
                 await server.stop(grace=5)
 
-    logger.info('gRPC server stopped')
+    logger.info("gRPC server stopped")
