@@ -1,8 +1,75 @@
+
 [project]
-name = "grpc-categorizer"
-version = "0.1.0"
-requires-python = ">=3.14"
+name = 'grpc-categorizer'
+version = '0.1.0'
+requires-python = '>=3.14'
 dependencies = [
-    "anyio>=4.15.1",
-    "grpcio-tools>=1.84.0",
+    'anyio>=4.15.1',
+    'grpcio-tools>=1.84.0',
 ]
+
+[dependency-groups]
+dev = [
+    'mypy>=1.18.0',
+    'pre-commit>=4.3.0',
+    'ruff>=0.14.0',
+    "types-grpcio>=1.84.0.20261021",
+    "types-protobuf>=7.35.1.20260906",
+]
+
+[tool.ruff]
+line-length = 80
+target-version = 'py314'
+src = ['.']
+exclude = ['infrastructure/grpc/generated']
+
+[tool.ruff.lint]
+select = [
+    'E',    # pycodestyle errors
+    'F',    # Pyflakes
+    'W',    # pycodestyle warnings
+    'I',    # import sorting
+    'N',    # naming conventions
+    'UP',   # modern Python syntax
+    'B',    # bugbear
+    'A',    # builtins
+    'C4',   # comprehensions
+    'SIM',  # simplifications
+    'D',    # docstrings
+    'ANN',  # type annotations
+    'TCH',  # type-checking imports
+    'FA',   # future annotations
+    'PGH',  # pygrep hooks
+]
+ignore = [
+    'D203',     # no blank line before class docstring
+    'D213',     # summary on first line
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = 'google'
+
+[tool.ruff.format]
+quote-style = 'single'
+indent-style = 'space'
+line-ending = 'lf'
+
+[tool.mypy]
+python_version = '3.14'
+strict = true
+warn_unreachable = true
+enable_error_code = [
+    'deprecated',
+    'ignore-without-code',
+    'redundant-expr',
+    'truthy-bool',
+]
+exclude = ['^infrastructure/grpc/generated/']
+
+[[tool.mypy.overrides]]
+module = ['infrastructure.grpc.generated.*']
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = ['client', 'infrastructure.grpc.server']
+disable_error_code = ['no-untyped-call']
